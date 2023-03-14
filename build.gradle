@@ -1,0 +1,60 @@
+plugins {
+    id 'java'
+    id 'jacoco'
+}
+
+group = 'pl.calulator'
+version = '1.0.0'
+
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.11'
+
+    compileOnly 'org.projectlombok:lombok:1.18.22'
+    annotationProcessor 'org.projectlombok:lombok:1.18.22'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter-params:5.8.2'
+
+    testCompileOnly 'org.projectlombok:lombok:1.18.22'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.22'
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "skipped", "failed"
+    }
+    finalizedBy jacocoTestReport
+}
+
+jacoco {
+    toolVersion = "0.8.7"
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.required = false
+        csv.required = false
+        html.outputLocation = layout.buildDirectory.dir('jacocoHtmlCustom')
+    }
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                counter = 'LINE'
+                value = 'COVEREDRATIO'
+                minimum = 0.20
+            }
+        }
+    }
+}
+
+check.dependsOn jacocoTestCoverageVerification

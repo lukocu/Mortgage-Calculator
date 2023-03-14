@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pl"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AmountsCalculationServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Kalkulator_Hipoteczny</a> &gt; <a href="index.source.html" class="el_package">pl.zajavka.mortgage.services</a> &gt; <span class="el_source">AmountsCalculationServiceImpl.java</span></div><h1>AmountsCalculationServiceImpl.java</h1><pre class="source lang-java linenums">package pl.zajavka.mortgage.services;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import pl.zajavka.mortgage.model.InputData;
+import pl.zajavka.mortgage.model.Overpayment;
+import pl.zajavka.mortgage.model.Rate;
+import pl.zajavka.mortgage.model.RateAmounts;
+
+<span class="nc" id="L10">@Slf4j</span>
+<span class="nc" id="L11">@RequiredArgsConstructor</span>
+public class AmountsCalculationServiceImpl implements AmountsCalculationService {
+
+    private final ConstantAmountsCalculationService constantAmountsCalculationService;
+
+    private final DecreasingAmountsCalculationService decreasingAmountsCalculationService;
+
+    @Override
+    public RateAmounts calculate(final InputData inputData, final Overpayment overpayment) {
+<span class="nc bnc" id="L20" title="All 3 branches missed.">        switch (inputData.getRateType()) {</span>
+            case CONSTANT:
+<span class="nc" id="L22">                return constantAmountsCalculationService.calculate(inputData, overpayment);</span>
+            case DECREASING:
+<span class="nc" id="L24">                return decreasingAmountsCalculationService.calculate(inputData, overpayment);</span>
+            default:
+<span class="nc" id="L26">                log.error(&quot;Case not handled: [{}]&quot;, inputData.getRateType());</span>
+<span class="nc" id="L27">                throw new MortgageException(&quot;Case not handled&quot;);</span>
+        }
+    }
+
+    @Override
+    public RateAmounts calculate(final InputData inputData, final Overpayment overpayment, final Rate previousRate) {
+<span class="nc bnc" id="L33" title="All 3 branches missed.">        switch (inputData.getRateType()) {</span>
+            case CONSTANT:
+<span class="nc" id="L35">                return constantAmountsCalculationService.calculate(inputData, overpayment, previousRate);</span>
+            case DECREASING:
+<span class="nc" id="L37">                return decreasingAmountsCalculationService.calculate(inputData, overpayment, previousRate);</span>
+            default:
+<span class="nc" id="L39">                log.error(&quot;Case not handled: [{}]&quot;, inputData.getRateType());</span>
+<span class="nc" id="L40">                throw new MortgageException(&quot;Case not handled&quot;);</span>
+        }
+    }
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

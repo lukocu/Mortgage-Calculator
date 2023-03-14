@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pl"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MortgageCalculationServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Kalkulator_Hipoteczny</a> &gt; <a href="index.source.html" class="el_package">pl.zajavka.mortgage.services</a> &gt; <span class="el_source">MortgageCalculationServiceImpl.java</span></div><h1>MortgageCalculationServiceImpl.java</h1><pre class="source lang-java linenums">package pl.zajavka.mortgage.services;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import pl.zajavka.mortgage.model.InputData;
+import pl.zajavka.mortgage.model.Rate;
+import pl.zajavka.mortgage.model.Summary;
+
+import java.util.List;
+
+<span class="nc" id="L11">@Slf4j</span>
+<span class="nc" id="L12">@RequiredArgsConstructor</span>
+public class MortgageCalculationServiceImpl implements MortgageCalculationService {
+
+    private final RateCalculationService rateCalculationService;
+
+    private final PrintingService printingService;
+
+    private final SummaryService summaryService;
+
+    @Override
+    public void calculate(InputData inputData) {
+<span class="nc" id="L23">        printingService.printIntroInformation(inputData);</span>
+
+<span class="nc" id="L25">        List&lt;Rate&gt; rates = rateCalculationService.calculate(inputData);</span>
+<span class="nc" id="L26">        rates.forEach(element -&gt; log.debug(&quot;Rate: [{}]&quot;, element));</span>
+<span class="nc" id="L27">        Summary summary = summaryService.calculateSummary(rates);</span>
+
+<span class="nc" id="L29">        printingService.printSummary(summary);</span>
+<span class="nc" id="L30">        printingService.printSchedule(rates, inputData);</span>
+<span class="nc" id="L31">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

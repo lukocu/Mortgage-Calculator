@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="pl.zajavka.mortgage.services.ConstantAmountsCalculationServiceImplTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2023-03-07T14:33:20" hostname="KOMPUTER" time="0.317">
+  <properties/>
+  <testcase name="Calculate rate amounts for first rate" classname="pl.zajavka.mortgage.services.ConstantAmountsCalculationServiceImplTest" time="0.294"/>
+  <testcase name="Calculate rate amounts for other rates" classname="pl.zajavka.mortgage.services.ConstantAmountsCalculationServiceImplTest" time="0.008"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pl"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MortgageCalculator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Kalkulator_Hipoteczny</a> &gt; <a href="index.source.html" class="el_package">pl.zajavka.mortgage</a> &gt; <span class="el_source">MortgageCalculator.java</span></div><h1>MortgageCalculator.java</h1><pre class="source lang-java linenums">package pl.zajavka.mortgage;
+
+import pl.zajavka.mortgage.model.InputData;
+import pl.zajavka.mortgage.model.MortgageType;
+import pl.zajavka.mortgage.model.Overpayment;
+import pl.zajavka.mortgage.services.*;
+
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.Map;
+import java.util.Objects;
+import java.util.TreeMap;
+
+<span class="nc" id="L14">public class MortgageCalculator {</span>
+
+    public static void main(String[] args) {
+
+        InputData inputData;
+        try {
+<span class="nc" id="L20">            new InputDataService().read();</span>
+<span class="nc" id="L21">        } catch (Exception e) {</span>
+<span class="nc" id="L22">           System.err.println(&quot;Error loading input data, interrupting. Error&quot;+ e.getMessage());</span>
+
+<span class="nc" id="L24">        }</span>
+
+/*        // To jest rodzaj mapy, ktĂłry w tym przypadku trzyma klucze posortowane rosnÄ…co.
+        // Wiem, ĹĽe nie tĹ‚umaczyĹ‚em go wczeĹ›niej. Spokojnie, jeszcze bÄ™dzie ;)
+        Map&lt;Integer, BigDecimal&gt; overpaymentSchema = new TreeMap&lt;&gt;();
+        overpaymentSchema.put(5, BigDecimal.valueOf(12000));
+        overpaymentSchema.put(19, BigDecimal.valueOf(10000));
+        overpaymentSchema.put(28, BigDecimal.valueOf(11000));
+        overpaymentSchema.put(64, BigDecimal.valueOf(16000));
+        overpaymentSchema.put(78, BigDecimal.valueOf(18000));
+
+        // WaĹĽne jest to aby zwrĂłciÄ‡ uwagÄ™, na to, ktĂłre dane wejĹ›ciowe sÄ… nadpisywane przez withery
+        InputData defaultInputData = InputData.defaultInputData()
+            .withAmount(new BigDecimal(&quot;296192.11&quot;))
+            .withMonthsDuration(BigDecimal.valueOf(360))
+            .withOverpaymentReduceWay(Overpayment.REDUCE_RATE)
+            .withRateType(MortgageType.CONSTANT)
+            .withOverpaymentSchema(overpaymentSchema);
+
+
+
+        CalculatorCreator.getInstance().calculate(defaultInputData);*/
+<span class="nc" id="L46">    }</span>
+
+    static class CalculatorCreator{
+        private static MortgageCalculationService instance;
+
+        private CalculatorCreator() {
+        }
+
+        public static MortgageCalculationService getInstance(){
+<span class="nc bnc" id="L55" title="All 2 branches missed.">            if(Objects.isNull(instance)){</span>
+<span class="nc" id="L56">                instance = new MortgageCalculationServiceImpl(</span>
+                        new RateCalculationServiceImpl(
+                                new TimePointCalculationServiceImpl(),
+                                new OverpaymentCalculationServiceImpl(),
+                                new AmountsCalculationServiceImpl(
+                                        new ConstantAmountsCalculationServiceImpl(),
+                                        new DecreasingAmountsCalculationServiceImpl()
+                                ),
+                                new ResidualCalculationServiceImpl(),
+                                new ReferenceCalculationServiceImpl()
+                        ),
+                        new PrintingServiceImpl(),
+<span class="nc" id="L68">                        SummaryServiceFactory.create()</span>
+                );
+            }
+<span class="nc" id="L71">            return instance;</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

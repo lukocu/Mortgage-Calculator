@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pl"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Rate.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Kalkulator_Hipoteczny</a> &gt; <a href="index.source.html" class="el_package">pl.zajavka.mortgage.model</a> &gt; <span class="el_source">Rate.java</span></div><h1>Rate.java</h1><pre class="source lang-java linenums">package pl.zajavka.mortgage.model;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Value;
+import lombok.With;
+
+import java.math.BigDecimal;
+
+@With
+<span class="nc bnc" id="L11" title="All 44 branches missed.">@Value</span>
+<span class="pc" id="L12">@Builder</span>
+<span class="fc" id="L13">@AllArgsConstructor</span>
+public class Rate {
+
+<span class="nc bnc" id="L16" title="All 2 branches missed.">    BigDecimal rateNumber;</span>
+<span class="pc bpc" id="L17" title="1 of 2 branches missed.">    TimePoint timePoint;</span>
+<span class="nc bnc" id="L18" title="All 2 branches missed.">    RateAmounts rateAmounts;</span>
+<span class="pc bnc" id="L19" title="All 2 branches missed.">    MortgageResidual mortgageResidual;</span>
+<span class="pc bnc" id="L20" title="All 2 branches missed.">    MortgageReference mortgageReference;</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pl"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ResidualCalculationServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Kalkulator_Hipoteczny</a> &gt; <a href="index.source.html" class="el_package">pl.zajavka.mortgage.services</a> &gt; <span class="el_source">ResidualCalculationServiceImpl.java</span></div><h1>ResidualCalculationServiceImpl.java</h1><pre class="source lang-java linenums">package pl.zajavka.mortgage.services;
+
+import pl.zajavka.mortgage.model.InputData;
+import pl.zajavka.mortgage.model.MortgageResidual;
+import pl.zajavka.mortgage.model.Rate;
+import pl.zajavka.mortgage.model.RateAmounts;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
+<span class="nc" id="L11">public class ResidualCalculationServiceImpl implements ResidualCalculationService {</span>
+
+    @Override
+    public MortgageResidual calculate(RateAmounts rateAmounts, InputData inputData) {
+<span class="nc bnc" id="L15" title="All 2 branches missed.">        if (BigDecimal.ZERO.equals(inputData.getAmount())) {</span>
+<span class="nc" id="L16">            return new MortgageResidual(BigDecimal.ZERO, BigDecimal.ZERO);</span>
+        } else {
+<span class="nc" id="L18">            BigDecimal residualAmount = calculateResidualAmount(inputData.getAmount(), rateAmounts);</span>
+<span class="nc" id="L19">            BigDecimal residualDuration = calculateResidualDuration(inputData, residualAmount, inputData.getMonthsDuration(), rateAmounts);</span>
+<span class="nc" id="L20">            return new MortgageResidual(residualAmount, residualDuration);</span>
+        }
+    }
+
+    @Override
+    public MortgageResidual calculate(RateAmounts rateAmounts, final InputData inputData, Rate previousRate) {
+<span class="nc" id="L26">        BigDecimal previousResidualAmount = previousRate.getMortgageResidual().getResidualAmount();</span>
+<span class="nc" id="L27">        BigDecimal previousResidualDuration = previousRate.getMortgageResidual().getResidualDuration();</span>
+
+<span class="nc bnc" id="L29" title="All 2 branches missed.">        if (BigDecimal.ZERO.equals(previousResidualAmount)) {</span>
+<span class="nc" id="L30">            return new MortgageResidual(BigDecimal.ZERO, BigDecimal.ZERO);</span>
+        } else {
+<span class="nc" id="L32">            BigDecimal residualAmount = calculateResidualAmount(previousResidualAmount, rateAmounts);</span>
+<span class="nc" id="L33">            BigDecimal residualDuration = calculateResidualDuration(inputData, residualAmount, previousResidualDuration, rateAmounts);</span>
+<span class="nc" id="L34">            return new MortgageResidual(residualAmount, residualDuration);</span>
+        }
+    }
+
+    private BigDecimal calculateResidualDuration(
+        InputData inputData,
+        BigDecimal residualAmount,
+        BigDecimal previousResidualDuration,
+        RateAmounts rateAmounts
+    ) {
+        // jak wystÄ…pi nadpĹ‚ata to zaczynajÄ… siÄ™ schody,
+        // trzeba przeliczyÄ‡ kredyt w zaleĹĽnoĹ›ci od tego czy podczas nadpĹ‚aty zmniejszamy czas trwania czy wysokoĹ›Ä‡ raty
+<span class="nc bnc" id="L46" title="All 2 branches missed.">        if (rateAmounts.getOverpayment().getAmount().compareTo(BigDecimal.ZERO) &gt; 0) {</span>
+<span class="nc bnc" id="L47" title="All 3 branches missed.">            switch (inputData.getRateType()) {</span>
+                case CONSTANT:
+<span class="nc" id="L49">                    return calculateConstantResidualDuration(inputData, residualAmount, rateAmounts);</span>
+                case DECREASING:
+<span class="nc" id="L51">                    return calculateDecreasingResidualDuration(residualAmount, rateAmounts);</span>
+                default:
+<span class="nc" id="L53">                    throw new MortgageException(&quot;Case not handled&quot;);</span>
+            }
+        } else {
+            // w kaĹĽdym normalnym przypadku z miesiÄ…ca na miesiÄ…c iloĹ›Ä‡ pozostaĹ‚ych miesiÄ™cy jest zmniejszna o 1
+<span class="nc" id="L57">            return previousResidualDuration.subtract(BigDecimal.ONE);</span>
+        }
+    }
+
+    private BigDecimal calculateDecreasingResidualDuration(BigDecimal residualAmount, RateAmounts rateAmounts) {
+<span class="nc" id="L62">        return residualAmount.divide(rateAmounts.getCapitalAmount(), 0, RoundingMode.CEILING);</span>
+    }
+
+    @SuppressWarnings(&quot;UnnecessaryLocalVariable&quot;)
+    // tutaj mamy zaszytÄ… logikÄ™ z tego co wspomniaĹ‚em w trakcie nagraĹ„,
+    // czyli jak oszacowaÄ‡ iloĹ›Ä‡ miesiÄ™cy jaka nam pozostaĹ‚a do spĹ‚aty przy nadpĹ‚acie, ratach staĹ‚ych i zmniejszeniu czasu trwania.
+    // WyjaĹ›nienie stosowanych wzorĂłw zostaĹ‚o dostarczone w pliku z rozwiÄ…zaniem
+    private BigDecimal calculateConstantResidualDuration(InputData inputData, BigDecimal residualAmount, RateAmounts rateAmounts) {
+        // log_y(x) = log(x) / log (y)
+<span class="nc" id="L71">        BigDecimal q = AmountsCalculationService.calculateQ(inputData.getInterestPercent());</span>
+
+        // licznik z naszego logarytmu z licznika wzoru koĹ„cowego
+<span class="nc" id="L74">        BigDecimal xNumerator = rateAmounts.getRateAmount();</span>
+        // mianownik z naszego logarytmu z licznika wzoru koĹ„cowego. b/m to rĂłwnie dobrze q-1
+<span class="nc" id="L76">        BigDecimal xDenominator = rateAmounts.getRateAmount().subtract(residualAmount.multiply(q.subtract(BigDecimal.ONE)));</span>
+
+<span class="nc" id="L78">        BigDecimal x = xNumerator.divide(xDenominator, 10, RoundingMode.HALF_UP);</span>
+<span class="nc" id="L79">        BigDecimal y = q;</span>
+
+        // logarytm z licznika
+<span class="nc" id="L82">        BigDecimal logX = BigDecimal.valueOf(Math.log(x.doubleValue()));</span>
+        // logarytm z mianownika
+<span class="nc" id="L84">        BigDecimal logY = BigDecimal.valueOf(Math.log(y.doubleValue()));</span>
+
+<span class="nc" id="L86">        return logX.divide(logY, 0, RoundingMode.CEILING);</span>
+    }
+
+    private BigDecimal calculateResidualAmount(final BigDecimal residualAmount, final RateAmounts rateAmounts) {
+<span class="nc" id="L90">        return residualAmount</span>
+<span class="nc" id="L91">            .subtract(rateAmounts.getCapitalAmount())</span>
+<span class="nc" id="L92">            .subtract(rateAmounts.getOverpayment().getAmount())</span>
+<span class="nc" id="L93">            .max(BigDecimal.ZERO);</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
