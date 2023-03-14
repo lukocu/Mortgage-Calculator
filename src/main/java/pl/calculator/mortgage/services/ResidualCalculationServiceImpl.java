@@ -41,8 +41,7 @@ public class ResidualCalculationServiceImpl implements ResidualCalculationServic
         BigDecimal previousResidualDuration,
         RateAmounts rateAmounts
     ) {
-        // jak wystąpi nadpłata to zaczynają się schody,
-        // trzeba przeliczyć kredyt w zależności od tego czy podczas nadpłaty zmniejszamy czas trwania czy wysokość raty
+       
         if (rateAmounts.getOverpayment().getAmount().compareTo(BigDecimal.ZERO) > 0) {
             switch (inputData.getRateType()) {
                 case CONSTANT:
@@ -53,7 +52,7 @@ public class ResidualCalculationServiceImpl implements ResidualCalculationServic
                     throw new MortgageException("Case not handled");
             }
         } else {
-            // w każdym normalnym przypadku z miesiąca na miesiąc ilość pozostałych miesięcy jest zmniejszna o 1
+           
             return previousResidualDuration.subtract(BigDecimal.ONE);
         }
     }
@@ -63,24 +62,22 @@ public class ResidualCalculationServiceImpl implements ResidualCalculationServic
     }
 
     @SuppressWarnings("UnnecessaryLocalVariable")
-    // tutaj mamy zaszytą logikę z tego co wspomniałem w trakcie nagrań,
-    // czyli jak oszacować ilość miesięcy jaka nam pozostała do spłaty przy nadpłacie, ratach stałych i zmniejszeniu czasu trwania.
-    // Wyjaśnienie stosowanych wzorów zostało dostarczone w pliku z rozwiązaniem
+    
     private BigDecimal calculateConstantResidualDuration(InputData inputData, BigDecimal residualAmount, RateAmounts rateAmounts) {
-        // log_y(x) = log(x) / log (y)
+       
         BigDecimal q = AmountsCalculationService.calculateQ(inputData.getInterestPercent());
 
-        // licznik z naszego logarytmu z licznika wzoru końcowego
+       
         BigDecimal xNumerator = rateAmounts.getRateAmount();
-        // mianownik z naszego logarytmu z licznika wzoru końcowego. b/m to równie dobrze q-1
+        
         BigDecimal xDenominator = rateAmounts.getRateAmount().subtract(residualAmount.multiply(q.subtract(BigDecimal.ONE)));
 
         BigDecimal x = xNumerator.divide(xDenominator, 10, RoundingMode.HALF_UP);
         BigDecimal y = q;
 
-        // logarytm z licznika
+        
         BigDecimal logX = BigDecimal.valueOf(Math.log(x.doubleValue()));
-        // logarytm z mianownika
+        
         BigDecimal logY = BigDecimal.valueOf(Math.log(y.doubleValue()));
 
         return logX.divide(logY, 0, RoundingMode.CEILING);
