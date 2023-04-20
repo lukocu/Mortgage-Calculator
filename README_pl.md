@@ -4,8 +4,7 @@ Kredyt hipoteczny jest zabezpieczony hipoteką i cechuje się zwykle wysoką kwo
 
 ## Spis treści
 * [Informacje ogólne](#Informacje ogólne)
-* [Technologie](#technologie)
-* [Konfiguracja](#konfiguracja)
+
 
 ## Informacje ogólne
 
@@ -19,7 +18,7 @@ To oznacza, że na początku okresu spłaty rata całkowita jest najwyższa, a z
 
 Istnieje możliwość wcześniejszej spłaty kredytu, jednak niektóre banki doliczają sobie prowizję za taką nadpłatę. Podczas nadpłacania kredytu możemy wybrać, czy chcemy skrócić czas spłaty kredytu, czy też zachować długość spłacania rat, ale zmniejszyć miesięczną ratę. W przypadku rat stałych, skracamy okres spłaty, natomiast w drugiej opcji zmniejszamy miesięczną ratę, przy czym okres spłaty pozostaje taki sam. W przypadku rat malejących, jeśli nadpłacisz kredyt, możesz zmniejszyć wysokość miesięcznej raty poprzez odpowiednie podzielenie części kapitałowej. <br>
 
-Mamy 8 przypadków:
+**Mamy 8 przypadków:**
 
 - Przypadek rat stałych w momencie kiedy nie dokonujemy nadpłaty kredytu.
 - Przypadek rat malejących w momencie kiedy nie dokonujemy nadpłaty kredytu.
@@ -30,13 +29,27 @@ Mamy 8 przypadków:
 - Przypadek w którym zachodzi okres oprocentowania nadpłaty kredytu.
 - Przypadek w którym nie zachodzi okres oprocentowania nadpłaty kredytu.
 
-
 # Wzory
 
-A– wysokość kredytu<br>
-b– oprocentowanie w skali roku (stopy procentowe plus marża banku)<br>
-n– ilość rat do spłaty (okres kredytowania l (jak lata) pomnożony przez m, czyli 12, bo tyle jest miesięcy w roku)<br>
-R– to będzie wysokość naszej raty<br>
-m- liczba miesięcy w okresie rozliczeniowym, jaki bierzemy pod uwagę, czyli najczęściej 12- liczba msc w roku
+A - wysokość kredytu,<br>
+b - oprocentowanie w skali roku (stopy procentowe plus marża banku),<br>
+n - ilość rat do spłaty (okres kredytowania l (jak lata) pomnożony przez m, czyli 12, bo tyle jest miesięcy w roku),<br>
+R - to będzie wysokość naszej raty,<br>
+m - liczba miesięcy w okresie rozliczeniowym, jaki bierzemy pod uwagę, czyli najczęściej 12- liczba msc w roku.
+
+**Wzór na obliczenie raty stałej**
+
+$$ q = 1 + \frac{b}{m} $$
 
 $$ R = \frac{A \cdot q^n \cdot (q-1)}{q^n - 1} $$
+
+**Wzór na obliczenie raty malejącej**
+
+Rata Kapitałowa:<br>
+$$ R_{k} = \frac{A}{n} $$
+
+Rata odsetkowa:<br>
+$$ R_{o} = \frac{(A-x\cdot R_{k})\cdot b}{12} $$
+
+Rata Całkowita:<br>
+$$ R_{c} = R_{k} + R_{o} $$
