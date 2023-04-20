@@ -45,11 +45,14 @@ $$ R = \frac{A \cdot q^n \cdot (q-1)}{q^n - 1} $$
 
 **Wzór na obliczenie raty malejącej**
 
-Rata Kapitałowa:<br>
-$$ R_{k} = \frac{A}{n} $$
+Rata Kapitałowa:
 
-Rata odsetkowa:<br>
-$$ R_{o} = \frac{(A-x\cdot R_{k})\cdot b}{12} $$
+$$ Rk = \frac{A}{n} $$
 
-Rata Całkowita:<br>
-$$ R_{c} = R_{k} + R_{o} $$
+Rata odsetkowa:
+
+$$ Ro = \frac{(A-x\cdot R_{k})\cdot b}{12} $$
+
+Rata Całkowita:
+
+$$ R = Rk + Ro $$
