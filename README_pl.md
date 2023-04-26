@@ -59,4 +59,4 @@ $$ R = Rk + Ro $$
 
 Jeśli chcemy obliczyć pozostałą ilość miesięcy spłaty przy stałej racie i nadpłacie, musimy przekształcić wzór na formułę, która pozwoli nam wyliczyć ilość miesięcy, jaka nam pozostała do spłaty przy aktualnym stanie kredytu i stałej racie.
 
-$n = \frac{\log\frac{R}{R - \frac{A}{b/m}}}{\log(1 + \frac{b}{m})}$
+$n = \frac{\log\frac{R}{R - \frac{A}{\frac{b}{m}}}}{\log(1 + \frac{b}{m})}$
